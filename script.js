@@ -10,7 +10,6 @@ function initializeGame() {
     const mole = document.createElement('div');
     mole.className = 'mole';
     hole.appendChild(mole);
-    hole.addEventListener('click', whack);
   });
 }
 
