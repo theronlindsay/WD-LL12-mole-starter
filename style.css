@@ -1,30 +1,83 @@
+/* Import Google Fonts for a fun, game-appropriate look */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Rubik:wght@400;700&family=Nunito:wght@400;700;800&display=swap');
+
 body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #a8e6cf;
-  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+  font-family: 'Fredoka One', 'Rubik', 'Nunito', cursive, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Animated background gradient */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+h1 {
+  font-size: 3em;
+  color: #fff;
+  text-shadow: 3px 3px 0px #ff4757, 6px 6px 10px rgba(0,0,0,0.3);
+  margin: 20px 0;
+  /* transform: rotate(-2deg); */
+  animation: bounce 2s ease-in-out infinite alternate;
+}
+
+@keyframes bounce {
+  0% { transform:  translateY(0px); }
+  100% { transform:  translateY(-10px); }
 }
 
 .game {
-  width: 300px;
-  height: 300px;
+  width: 350px;
+  height: 350px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 15px;
   margin: 20px;
+  padding: 20px;
+  background: linear-gradient(45deg, #8b4513, #a0522d);
+  border-radius: 20px;
+  box-shadow: 
+    0 10px 30px rgba(0,0,0,0.3),
+    inset 0 2px 10px rgba(255,255,255,0.2);
+  border: 5px solid #654321;
 }
 
 .hole {
-  background: #3a4e48;
+  background: radial-gradient(circle, #2c1810 0%, #1a0f0a 70%, #000 100%);
   border-radius: 50%;
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  box-shadow: 
+    inset 0 5px 15px rgba(0,0,0,0.8),
+    0 2px 5px rgba(0,0,0,0.3);
+  border: 3px solid #654321;
+  transition: transform 0.1s ease;
+}
+
+.hole:hover {
+  transform: scale(1.05);
+}
+
+.hole:active {
+  transform: scale(0.95);
 }
 
 .mole {
-  background: #8b4513;
+  background-image: url('mole.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border-radius: 50%;
   position: absolute;
   top: 100%;
@@ -33,22 +86,170 @@ body {
   transition: top 0.1s;
 }
 
+/* Hide hole numbers */
+.hole-number {
+  display: none;
+}
+
+/* Mole pop-up animation enhancement */
 .hole.up .mole {
   top: 0;
+  animation: molePopUp 0.3s ease-out;
+}
+
+@keyframes molePopUp {
+  0% { 
+    top: 100%; 
+    transform: scale(0.8) rotate(-10deg);
+  }
+  50% { 
+    transform: scale(1.1) rotate(5deg);
+  }
+  100% { 
+    top: 0; 
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Add some sparkle effects */
+.game::after {
+  content: "✨";
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  font-size: 30px;
+  animation: sparkle 3s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: rotate(0deg) scale(0.5); }
+  50% { opacity: 1; transform: rotate(180deg) scale(1.2); }
 }
 
 button {
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
   cursor: pointer;
-  background: #ff8b94;
+  background: linear-gradient(45deg, #ff6b6b, #ff5252);
   border: none;
-  border-radius: 5px;
+  border-radius: 25px;
   color: white;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  box-shadow: 
+    0 5px 15px rgba(255,107,107,0.4),
+    0 2px 5px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  transform: translateY(0);
+  font-family: inherit;
+}
+
+button:hover {
+  background: linear-gradient(45deg, #ff5252, #ff4444);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 7px 20px rgba(255,107,107,0.6),
+    0 4px 10px rgba(0,0,0,0.3);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 
+    0 3px 10px rgba(255,107,107,0.4),
+    0 1px 3px rgba(0,0,0,0.2);
+}
+
+button:disabled {
+  background: linear-gradient(45deg, #999, #777);
+  cursor: not-allowed;
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .score,
+.mole-count,
 .timer {
   font-size: 24px;
   margin: 10px;
+  font-weight: bold;
+}
+
+/* Modal Styles */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.game-over-modal {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px;
+  border-radius: 25px;
+  text-align: center;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 0 3px rgba(255,255,255,0.1);
+  max-width: 450px;
+  width: 90%;
+  color: white;
+  border: 3px solid rgba(255,255,255,0.2);
+}
+
+.game-over-modal h2 {
+  color: #fff;
+  margin-bottom: 25px;
+  font-size: 36px;
+  text-shadow: 3px 3px 0px #ff6b6b;
+  animation: pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.05); }
+}
+
+.game-over-modal p {
+  font-size: 20px;
+  margin: 15px 0;
+  color: rgba(255,255,255,0.9);
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.final-score,
+.final-moles,
+.total-moles {
+  font-weight: bold;
+  color: #ffeb3b;
+  font-size: 1.2em;
+  text-shadow: 2px 2px 0px #ff6b6b;
+}
+
+.play-again-btn {
+  background: linear-gradient(45deg, #4CAF50, #45a049);
+  margin: 15px 10px;
+  font-size: 16px;
+  padding: 12px 25px;
+}
+
+.play-again-btn:hover {
+  background: linear-gradient(45deg, #45a049, #3d8b40);
+}
+
+.close-modal-btn {
+  background: linear-gradient(45deg, #f44336, #da190b);
+  margin: 15px 10px;
+  font-size: 16px;
+  padding: 12px 25px;
+}
+
+.close-modal-btn:hover {
+  background: linear-gradient(45deg, #da190b, #c41e3a);
 }

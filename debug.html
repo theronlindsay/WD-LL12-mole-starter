@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Test</title>
+</head>
+<body>
+    <h1>Debug Test</h1>
+    <button onclick="testGame()">Test Start Game</button>
+    <div id="debug-output"></div>
+    
+    <script>
+        function testGame() {
+            const output = document.getElementById('debug-output');
+            try {
+                output.innerHTML += '<p>Testing game start...</p>';
+                if (typeof startGameWithTimer === 'function') {
+                    output.innerHTML += '<p>startGameWithTimer function exists</p>';
+                    startGameWithTimer();
+                } else {
+                    output.innerHTML += '<p>ERROR: startGameWithTimer function not found</p>';
+                }
+            } catch (e) {
+                output.innerHTML += '<p>ERROR: ' + e.message + '</p>';
+            }
+        }
+    </script>
+    <script src="provided.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
